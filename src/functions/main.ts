@@ -1,5 +1,5 @@
 import { Handler } from "@netlify/functions";
-import { text } from "../../payload";
+import { text } from "../payload";
 
 const handler: Handler = async (_event, _context) => {
   return {
