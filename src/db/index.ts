@@ -1,20 +1,13 @@
+import { db } from '../config/supabase';
 import { Event } from '../models/event';
-import { getDatabase, ref, push, set, query, child } from 'firebase/database';
+import { User } from '../models/user';
 
-const db = getDatabase();
-const eventListRef = ref(db, 'events');
-
-export async function saveEvent(event: Event) {
-  const newEventRef = push(eventListRef);
-  await set(newEventRef, event);
-}
-
-export function updateEvent(event: Event) {
-  //
+export function saveEvent(event: Partial<Event>) {
+  return db.from<Event>('events').upsert(event);
 }
 
 export async function fetchEvents() {
-  const events = query(eventListRef);
+  return db.from<Event>('events').select();
 }
 
 export function handleRSVP(
@@ -25,14 +18,21 @@ export function handleRSVP(
   //
 }
 
-export function addAdmin(uid: string) {
+export function fetchAdminList() {
+  return db.from<User>('admins').select().match({ is_admin: true });
+}
+
+export async function addAdmin(uid: string) {
+  const admins = await fetchAdminList();
+  db.from<User>('users');
+}
+
+export async function removeAdmin(uid: string) {
   //
 }
 
-export function removeAdmin(uid: string) {
-  //
-}
-
-export function isUserAdmin(uid: string) {
-  //
+export async function isUserAdmin(uid: string) {
+  const users = await fetchAdminList();
+  const user = users.data?.find(user => user.uid === uid);
+  return !!user;
 }
