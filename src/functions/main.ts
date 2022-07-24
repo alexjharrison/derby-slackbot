@@ -1,10 +1,12 @@
-import { Handler } from "@netlify/functions";
-import { text } from "../payload";
+import type { Handler } from "@netlify/functions";
+import { parse } from "query-string";
 
-const handler: Handler = async (_event, _context) => {
+const handler: Handler = async (event) => {
+  const body = parse(event.body || "");
+  console.log(body.user_id);
   return {
     statusCode: 200,
-    body: JSON.stringify({ message: text }),
+    body: JSON.stringify({ event }),
   };
 };
 
