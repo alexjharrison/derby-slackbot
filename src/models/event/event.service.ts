@@ -7,6 +7,8 @@ export function saveEvent(event: Partial<Event>) {
 }
 
 export async function fetchUpcomingEvents() {
+  // console.dir({ users }, { depth: null });
+
   const upcomingEvents = await db
     .from<Event>('events')
     .select('*')

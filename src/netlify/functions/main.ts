@@ -1,7 +1,7 @@
 import type { Handler } from '@netlify/functions';
 import { ReceiverEvent } from '@slack/bolt';
 import { app } from '../../config/slack';
-import { fetchSlackUsers } from '../../models/user/user.store';
+import { syncSlackUsers } from '../../models/user/user.store';
 
 const handler: Handler = async event => {
   let payload: any = {};
@@ -26,7 +26,7 @@ const handler: Handler = async event => {
     };
   }
 
-  await fetchSlackUsers();
+  await syncSlackUsers();
 
   const slackEvent: ReceiverEvent = {
     body: payload,
