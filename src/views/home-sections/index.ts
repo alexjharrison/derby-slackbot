@@ -1,19 +1,29 @@
 import { HomeView } from '@slack/bolt';
-import { Event } from '../../models/event';
-import { generateHomeGameListView } from './game-list';
+import {
+  fetchPastEvents,
+  fetchUpcomingEvents,
+} from '../../models/event/event.service';
+import { render } from '../../utils/render';
+import { homeAdminView } from './admin';
+import { generateEventList } from './event';
 import { homeHeaderView } from './header';
 
-export function generateHomeView(isAdmin: boolean, events: Event[]): HomeView {
-  const homeView: HomeView = {
-    type: 'home',
-    blocks: homeHeaderView,
-  };
+export async function generateHomeView(isAdmin: boolean): Promise<HomeView> {
+  const futureEvents = await fetchUpcomingEvents();
+  const pastEvents = await fetchPastEvents();
 
-  if (isAdmin) {
-    homeView.blocks.push(...homeHeaderView);
-  }
-
-  homeView.blocks.push(...generateHomeGameListView(events));
-
-  return homeView;
+  return isAdmin
+    ? render(
+        'home',
+        homeHeaderView,
+        homeAdminView,
+        generateEventList('Upcoming Events', futureEvents),
+        generateEventList('Past Events', pastEvents)
+      )
+    : render(
+        'home',
+        homeHeaderView,
+        generateEventList('Upcoming Events', futureEvents),
+        generateEventList('Past Events', pastEvents)
+      );
 }

@@ -1,5 +1,5 @@
 import { App, ExpressReceiver } from '@slack/bolt';
-import { registerEvents } from '../eventListeners';
+import { registerEvents } from '../controllers';
 
 const expressReceiver = new ExpressReceiver({
   signingSecret: process.env.slackSigningSecret || '',

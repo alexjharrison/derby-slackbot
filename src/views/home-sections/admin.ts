@@ -2,18 +2,48 @@ import { HomeView } from '@slack/bolt';
 
 export const homeAdminView: HomeView['blocks'] = [
   {
+    type: 'section',
+    fields: [
+      {
+        type: 'mrkdwn',
+        text: ':briefcase: *ADMIN STUFF* :briefcase:',
+      },
+    ],
+  },
+  {
     type: 'actions',
     elements: [
       {
         type: 'button',
-        style: 'primary',
         text: {
           type: 'plain_text',
-          text: 'Create a new event',
           emoji: true,
+          text: 'Create an Event',
         },
-        action_id: 'open_new_event_modal',
+        style: 'primary',
+        value: 'open_event_create_modal',
+      },
+      {
+        type: 'button',
+        text: {
+          type: 'plain_text',
+          emoji: true,
+          text: 'Edit Admins',
+        },
+        value: 'open_edit_admins_modal',
       },
     ],
+  },
+  {
+    type: 'context',
+    elements: [
+      {
+        type: 'mrkdwn',
+        text: 'Only admins can see this section. Click Edit Admins to allow others to create events.',
+      },
+    ],
+  },
+  {
+    type: 'divider',
   },
 ];
