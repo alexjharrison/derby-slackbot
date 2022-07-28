@@ -5,7 +5,7 @@ import {
 } from '../../models/event/event.service';
 import { render } from '../../utils/render';
 import { homeAdminView } from './admin';
-import { generateEventList } from './event';
+import { generateEventList } from './events';
 import { homeHeaderView } from './header';
 
 export async function generateHomeView(isAdmin: boolean): Promise<HomeView> {

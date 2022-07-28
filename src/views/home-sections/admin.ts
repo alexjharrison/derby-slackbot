@@ -2,13 +2,11 @@ import { HomeView } from '@slack/bolt';
 
 export const homeAdminView: HomeView['blocks'] = [
   {
-    type: 'section',
-    fields: [
-      {
-        type: 'mrkdwn',
-        text: ':briefcase: *ADMIN STUFF* :briefcase:',
-      },
-    ],
+    type: 'header',
+    text: {
+      type: 'plain_text',
+      text: ':briefcase: Admin Stuff :briefcase:',
+    },
   },
   {
     type: 'actions',
@@ -42,8 +40,5 @@ export const homeAdminView: HomeView['blocks'] = [
         text: 'Only admins can see this section. Click Edit Admins to allow others to create events.',
       },
     ],
-  },
-  {
-    type: 'divider',
   },
 ];

@@ -5,8 +5,8 @@ export interface User {
   uid: string;
   is_admin: boolean;
   created_at: string;
-  accepted_events: string[];
-  rejected_events: string[];
-  undecided_events: string[];
+  accepted_events: number[];
+  rejected_events: number[];
+  undecided_events: number[];
   slack_data?: NonNullable<UsersListResponse['members']>[number];
 }

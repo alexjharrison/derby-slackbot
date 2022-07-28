@@ -32,6 +32,10 @@ export async function syncSlackUsers() {
     ...dbUser,
     slack_data: slackUsers.find(slackUser => slackUser.id === dbUser.uid),
   }));
+
+  currentUser = users.find(user => currentUID === user.uid);
 }
 
 export let users: User[] = [];
+export let currentUID: string | undefined;
+export let currentUser: User | undefined;

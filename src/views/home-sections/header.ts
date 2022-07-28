@@ -1,11 +1,12 @@
 import { HomeView } from '@slack/bolt';
+import { paddingView } from '../padding';
 
 export const homeHeaderView: HomeView['blocks'] = [
   {
     type: 'header',
     text: {
       type: 'plain_text',
-      text: ':roller_skate::roller_skate: DJRD Events :roller_skate::roller_skate:',
+      text: ':roller_skate::roller_skate: DJRD EVENTS :roller_skate::roller_skate:',
     },
   },
   {

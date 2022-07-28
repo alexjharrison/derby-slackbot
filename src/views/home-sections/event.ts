@@ -1,26 +1,9 @@
 import { HomeView } from '@slack/bolt';
+import { format } from 'date-fns';
 import { Event } from '../../models/event/event.interface';
+import { generateRSVPButtons } from './rsvp-buttons';
 
-export function generateEventList(
-  headerText: string,
-  events: Event[]
-): HomeView['blocks'] {
-  return [
-    {
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: `:calendar:| *${headerText}* |:calendar:`,
-      },
-    },
-
-    ...events.flatMap(generateEventRow),
-
-    { type: 'divider' },
-  ];
-}
-
-function generateEventRow(evt: Event): HomeView['blocks'] {
+export function generateEventRow(evt: Event): HomeView['blocks'] {
   const eventRows: HomeView['blocks'] = [];
 
   if (evt.title)
@@ -32,14 +15,56 @@ function generateEventRow(evt: Event): HomeView['blocks'] {
       },
     });
 
-  if (evt.details)
-    eventRows.push({
-      type: 'section',
-      text: {
-        text: `*Details*: ${evt.details}`,
-        type: 'mrkdwn',
-      },
-    });
+  const details = evt.details ? `*Details*: ${evt.details}` : '';
+
+  const formattedDate =
+    (evt.start_date
+      ? `*Date*: \n${format(new Date(evt.start_date), 'PPPP')}\n${format(
+          new Date(evt.start_date),
+          'p'
+        )}`
+      : '') +
+    (evt.end_date ? ` - ${format(new Date(evt.end_date), 'p')}\n` : '');
+
+  const location_name = evt.location_name
+    ? `*Location*: ${evt.location_name}`
+    : '';
+
+  const location_address = evt.location_address
+    ? `*Address*: ${evt.location_address}`
+    : '';
+
+  const created_by = evt.created_by?.slack_data
+    ? `\nPosted by <@${evt.created_by.slack_data?.name}>\n`
+    : '';
+
+  const textBlock: HomeView['blocks'][number] = {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: [
+        formattedDate,
+        details,
+        location_name,
+        location_address,
+        created_by,
+      ].join('\n'),
+    },
+  };
+
+  if (evt.location_address) {
+    textBlock.accessory = {
+      type: 'button',
+      text: { type: 'plain_text', text: ':car: Directions' },
+      url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        evt.location_address
+      )}`,
+    };
+  }
+
+  eventRows.push(textBlock);
+  eventRows.push(...generateRSVPButtons(evt));
+  eventRows.push({ type: 'divider' });
 
   return eventRows;
 }
