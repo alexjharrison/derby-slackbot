@@ -5,7 +5,7 @@ export const homeAdminView: HomeView['blocks'] = [
     type: 'header',
     text: {
       type: 'plain_text',
-      text: ':briefcase: Admin Stuff :briefcase:',
+      text: ':briefcase:  Admin Stuff  :briefcase:',
     },
   },
   {

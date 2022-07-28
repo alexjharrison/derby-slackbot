@@ -17,8 +17,6 @@ const handler: Handler = async event => {
     };
   }
 
-  console.dir(payload, { depth: null });
-
   if (payload.type === 'url_verification') {
     return {
       statusCode: 200,
@@ -26,7 +24,7 @@ const handler: Handler = async event => {
     };
   }
 
-  await syncSlackUsers();
+  await syncSlackUsers(payload.event.user);
 
   const slackEvent: ReceiverEvent = {
     body: payload,

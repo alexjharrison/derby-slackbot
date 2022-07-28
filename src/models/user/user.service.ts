@@ -1,9 +1,12 @@
+import { RsvpStatus } from '../../config/constants';
 import { app } from '../../config/slack';
 import { db } from '../../config/supabase';
 import { User } from './user.interface';
+import { getCurrentUser, users } from './user.store';
 
 export async function fetchDbUsers() {
-  return (await db.from<User>('users').select('*')).data || [];
+  const users = await db.from<User>('users').select('*');
+  return users.data || [];
 }
 
 export async function fetchSlackUsers() {
@@ -44,4 +47,48 @@ export async function isUserAdmin(uid: string) {
   const users = await fetchAdminList();
   const user = users.find(user => user.uid === uid);
   return !!user;
+}
+
+export async function updateRSVP(
+  eventId: number,
+  newStatus: RsvpStatus,
+  userWithSlack: User = getCurrentUser()
+) {
+  const { slack_data, ...user } = userWithSlack;
+
+  user.accepted_events = user.accepted_events.filter(
+    evtIds => evtIds !== eventId
+  );
+  user.rejected_events = user.rejected_events.filter(
+    evtIds => evtIds !== eventId
+  );
+  user.undecided_events = user.undecided_events.filter(
+    evtIds => evtIds !== eventId
+  );
+
+  if (newStatus === 'accepted') {
+    user.accepted_events.push(eventId);
+  } else if (newStatus === 'rejected') {
+    user.rejected_events.push(eventId);
+  } else if (newStatus === 'unsure') {
+    user.undecided_events.push(eventId);
+  }
+
+  const res = await db
+    .from<User>('users')
+    .update({
+      accepted_events: user.accepted_events,
+      rejected_events: user.rejected_events,
+      undecided_events: user.undecided_events,
+    })
+    .match({ id: user.id });
+
+  // update global users list
+  const userIndex = users.findIndex(dbUser => dbUser.uid === user.uid);
+  users[userIndex] = {
+    ...users[userIndex],
+    accepted_events: res.data?.[0].accepted_events || [],
+    rejected_events: res.data?.[0].rejected_events || [],
+    undecided_events: res.data?.[0].undecided_events || [],
+  };
 }

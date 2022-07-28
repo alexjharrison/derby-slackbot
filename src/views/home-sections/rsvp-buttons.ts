@@ -1,10 +1,12 @@
 import { HomeView } from '@slack/bolt';
 import { RsvpStatus } from '../../config/constants';
 import { Event } from '../../models/event/event.interface';
-import { currentUser } from '../../models/user/user.store';
+import { getCurrentUser } from '../../models/user/user.store';
 
 export function generateRSVPButtons(evt: Event): HomeView['blocks'] {
   function getCurrentUserEventStatus(): RsvpStatus | undefined {
+    const currentUser = getCurrentUser();
+
     if (currentUser?.accepted_events.includes(evt.id)) {
       return 'accepted';
     } else if (currentUser?.rejected_events.includes(evt.id)) {

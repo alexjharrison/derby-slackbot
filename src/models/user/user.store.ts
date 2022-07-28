@@ -4,9 +4,10 @@ import {
   fetchDbUsers,
   fetchSlackUsers,
   insertUsers,
+  updateRSVP,
 } from './user.service';
 
-export async function syncSlackUsers() {
+export async function syncSlackUsers(uid: string) {
   let dbUsers = await fetchDbUsers();
   const slackUsers = await fetchSlackUsers();
 
@@ -33,9 +34,13 @@ export async function syncSlackUsers() {
     slack_data: slackUsers.find(slackUser => slackUser.id === dbUser.uid),
   }));
 
-  currentUser = users.find(user => currentUID === user.uid);
+  currentUserIdx = users.findIndex(user => uid === user.uid);
+
+  await updateRSVP(3, 'accepted');
+  await updateRSVP(4, 'rejected');
 }
 
 export let users: User[] = [];
-export let currentUID: string | undefined;
-export let currentUser: User | undefined;
+export let currentUserIdx: number;
+
+export const getCurrentUser = () => users[currentUserIdx];

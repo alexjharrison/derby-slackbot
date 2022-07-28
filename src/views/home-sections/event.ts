@@ -10,8 +10,15 @@ export function generateEventRow(evt: Event): HomeView['blocks'] {
     eventRows.push({
       type: 'section',
       text: {
-        text: `*${evt.title}*`,
+        text: `*${evt.title.toUpperCase()}*`,
         type: 'mrkdwn',
+      },
+      accessory: {
+        type: 'button',
+        text: {
+          type: 'plain_text',
+          text: "See Who's Coming :incoming_envelope:",
+        },
       },
     });
 
@@ -55,7 +62,7 @@ export function generateEventRow(evt: Event): HomeView['blocks'] {
   if (evt.location_address) {
     textBlock.accessory = {
       type: 'button',
-      text: { type: 'plain_text', text: ':car: Directions' },
+      text: { type: 'plain_text', text: 'Directions :car:' },
       url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
         evt.location_address
       )}`,

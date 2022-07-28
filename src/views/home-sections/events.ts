@@ -17,10 +17,6 @@ export function generateEventList(
         text: `:calendar:  ${headerText}  :calendar:`,
       },
     },
-    // {
-    //   type: 'context',
-    //   elements: [],
-    // },
 
     { type: 'divider' },
 
