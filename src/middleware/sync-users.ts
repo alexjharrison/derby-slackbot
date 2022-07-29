@@ -4,7 +4,7 @@ import {
   fetchDbUsers,
   fetchSlackUsers,
   insertUsers,
-  // updateRSVP,
+  updateRSVP,
 } from '../models/user/user.service';
 import { userStore } from '../models/user/user.store';
 
@@ -24,11 +24,11 @@ export function syncSlackUsers(app: App) {
 
     // people that are in the slack room
     // but not saved in the db
-    const newUsers = dbUids.filter(dbUid => slackUids.includes(dbUid));
+    const newUsers = slackUids.filter(slackUid => !dbUids.includes(slackUid));
 
     // people that are in the db
     // but not in the slack room
-    const goneUsers = slackUids.filter(slackUid => dbUids.includes(slackUid));
+    const goneUsers = dbUids.filter(dbUid => !slackUids.includes(dbUid));
 
     // sync slack room with the db
     if (goneUsers.length > 0) await deleteUsers(goneUsers);
@@ -46,8 +46,8 @@ export function syncSlackUsers(app: App) {
       user => uid === user.uid
     );
 
-    // await updateRSVP(3, 'unsure');
-    // await updateRSVP(4, 'unsure');
+    await updateRSVP(1, 'unsure');
+    await updateRSVP(2, 'unsure');
 
     await next();
   });
