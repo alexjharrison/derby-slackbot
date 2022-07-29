@@ -4,12 +4,12 @@ import {
   fetchDbUsers,
   fetchSlackUsers,
   insertUsers,
+  // updateRSVP,
 } from '../models/user/user.service';
 import { userStore } from '../models/user/user.store';
 
 export function syncSlackUsers(app: App) {
-  app.use(async ({ body, next, payload }) => {
-    console.dir({ payload }, { depth: null });
+  app.use(async ({ next, payload }) => {
     if (!('user' in payload)) {
       await next();
       return;
@@ -46,8 +46,8 @@ export function syncSlackUsers(app: App) {
       user => uid === user.uid
     );
 
-    //   await updateRSVP(3, 'accepted');
-    //   await updateRSVP(4, 'rejected');
+    // await updateRSVP(3, 'unsure');
+    // await updateRSVP(4, 'unsure');
 
     await next();
   });

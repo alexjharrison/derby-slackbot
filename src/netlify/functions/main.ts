@@ -1,7 +1,6 @@
 import type { Handler } from '@netlify/functions';
 import { ReceiverEvent } from '@slack/bolt';
 import { app } from '../../config/slack';
-// import { syncSlackUsers } from '../../models/user/user.store';
 
 const handler: Handler = async event => {
   let payload: any = {};
@@ -9,7 +8,6 @@ const handler: Handler = async event => {
   const body = (event.body || '').replace('payload=', '');
   try {
     payload = JSON.parse(decodeURIComponent(body));
-    // console.dir({ payload }, { depth: null });
   } catch (e) {
     console.log('JSON parse failed\n', e);
     return {
@@ -24,8 +22,6 @@ const handler: Handler = async event => {
       body: payload.challenge,
     };
   }
-
-  // await syncSlackUsers(payload.event?.user);
 
   const slackEvent: ReceiverEvent = {
     body: payload,
