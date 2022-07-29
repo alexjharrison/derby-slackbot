@@ -1,6 +1,6 @@
 import { RsvpStatus } from '../../config/constants';
 import { db } from '../../config/supabase';
-import { users } from '../user/user.store';
+import { userStore } from '../user/user.store';
 import { Event } from './event.interface';
 
 export function saveEvent(event: Partial<Event>) {
@@ -30,7 +30,9 @@ export async function fetchPastEvents() {
 export function attachCreatedByUser(event: Event): Event {
   return {
     ...event,
-    created_by: users.find(user => user.uid === event.created_by_user_id),
+    created_by: userStore.users.find(
+      user => user.uid === event.created_by_user_id
+    ),
   };
 }
 

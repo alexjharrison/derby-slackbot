@@ -2,7 +2,7 @@ import { RsvpStatus } from '../../config/constants';
 import { app } from '../../config/slack';
 import { db } from '../../config/supabase';
 import { User } from './user.interface';
-import { getCurrentUser, users } from './user.store';
+import { userStore } from './user.store';
 
 export async function fetchDbUsers() {
   const users = await db.from<User>('users').select('*');
@@ -52,7 +52,7 @@ export async function isUserAdmin(uid: string) {
 export async function updateRSVP(
   eventId: number,
   newStatus: RsvpStatus,
-  userWithSlack: User = getCurrentUser()
+  userWithSlack: User = userStore.getCurrentUser()
 ) {
   const { slack_data, ...user } = userWithSlack;
 
@@ -84,9 +84,11 @@ export async function updateRSVP(
     .match({ id: user.id });
 
   // update global users list
-  const userIndex = users.findIndex(dbUser => dbUser.uid === user.uid);
-  users[userIndex] = {
-    ...users[userIndex],
+  const userIndex = userStore.users.findIndex(
+    dbUser => dbUser.uid === user.uid
+  );
+  userStore.users[userIndex] = {
+    ...userStore.users[userIndex],
     accepted_events: res.data?.[0].accepted_events || [],
     rejected_events: res.data?.[0].rejected_events || [],
     undecided_events: res.data?.[0].undecided_events || [],
