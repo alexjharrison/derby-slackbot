@@ -9,6 +9,13 @@ export async function fetchDbUsers() {
   return users.data || [];
 }
 
+export async function toggleAdminStatus(uid: string, newAdminStatus: boolean) {
+  await db
+    .from<User>('users')
+    .update({ is_admin: newAdminStatus })
+    .eq('uid', uid);
+}
+
 export async function fetchSlackUsers() {
   return ((await app.client.users.list()).members || []).filter(
     user => !user.is_bot && user.name !== 'slackbot'
@@ -47,6 +54,23 @@ export async function isUserAdmin(uid: string) {
   const users = await fetchAdminList();
   const user = users.find(user => user.uid === uid);
   return !!user;
+}
+
+export function fetchUserByUid(uid: string) {
+  return userStore.users.find(user => user.uid === uid);
+}
+
+export function getEventStatusByUser(
+  eventId: number,
+  user: User
+): RsvpStatus | undefined {
+  if (user.accepted_events.includes(eventId)) {
+    return 'accepted';
+  } else if (user.rejected_events.includes(eventId)) {
+    return 'rejected';
+  } else if (user.undecided_events.includes(eventId)) {
+    return 'unsure';
+  } else return undefined;
 }
 
 export async function updateRSVP(

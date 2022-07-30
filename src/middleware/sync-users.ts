@@ -9,13 +9,20 @@ import {
 import { userStore } from '../models/user/user.store';
 
 export function syncSlackUsers(app: App) {
-  app.use(async ({ next, payload }) => {
-    if (!('user' in payload)) {
+  app.use(async ({ next, payload, body }) => {
+    let uid: string;
+
+    if ('user' in payload) {
+      uid = payload.user;
+    } else if ('user' in body && 'id' in body.user) {
+      uid = body.user.id;
+    } else {
+      console.log("Didn't sync users");
       await next();
       return;
     }
+    console.log('Users synced');
 
-    const uid = payload.user;
     let dbUsers = await fetchDbUsers();
     const slackUsers = await fetchSlackUsers();
 
@@ -45,9 +52,6 @@ export function syncSlackUsers(app: App) {
     userStore.currentUserIdx = userStore.users.findIndex(
       user => uid === user.uid
     );
-
-    await updateRSVP(1, 'unsure');
-    await updateRSVP(2, 'unsure');
 
     await next();
   });

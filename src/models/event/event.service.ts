@@ -1,10 +1,21 @@
 import { RsvpStatus } from '../../config/constants';
 import { db } from '../../config/supabase';
+import { fetchUserByUid } from '../user/user.service';
 import { userStore } from '../user/user.store';
 import { Event } from './event.interface';
 
 export function saveEvent(event: Partial<Event>) {
   return db.from<Event>('events').upsert(event);
+}
+
+export async function fetchEventById(id: number) {
+  const res = await db
+    .from<Event>('events')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+
+  return res.data;
 }
 
 export async function fetchUpcomingEvents() {
@@ -34,8 +45,4 @@ export function attachCreatedByUser(event: Event): Event {
       user => user.uid === event.created_by_user_id
     ),
   };
-}
-
-export function handleRSVP(userId: string, gameId: string, status: RsvpStatus) {
-  //
 }

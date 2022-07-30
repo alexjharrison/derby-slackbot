@@ -28,7 +28,7 @@ export const homeAdminView: HomeView['blocks'] = [
           emoji: true,
           text: 'Edit Admins',
         },
-        value: 'open_edit_admins_modal',
+        action_id: 'open_edit_admins_modal',
       },
     ],
   },

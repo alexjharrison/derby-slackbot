@@ -1,26 +1,42 @@
 import { HomeView } from '@slack/bolt';
 import { format } from 'date-fns';
 import { Event } from '../../models/event/event.interface';
+import { capitalize } from '../../utils/text';
 import { generateRSVPButtons } from './rsvp-buttons';
+import { generateRSVPStatus } from './rsvp-status';
 
 export function generateEventRow(evt: Event): HomeView['blocks'] {
   const eventRows: HomeView['blocks'] = [];
 
   if (evt.title)
     eventRows.push({
-      type: 'section',
+      type: 'header',
       text: {
-        text: `*${evt.title.toUpperCase()}*`,
-        type: 'mrkdwn',
-      },
-      accessory: {
-        type: 'button',
-        text: {
-          type: 'plain_text',
-          text: "See Who's Coming :incoming_envelope:",
-        },
+        text: `${capitalize(evt.title)}`,
+        type: 'plain_text',
       },
     });
+
+  if (evt.created_by) {
+    eventRows.push({
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: 'Posted by',
+        },
+        {
+          type: 'image',
+          image_url: evt.created_by.slack_data?.profile?.image_48 || '',
+          alt_text: evt.created_by.slack_data?.name || '',
+        },
+        {
+          type: 'mrkdwn',
+          text: `<@${evt.created_by.slack_data?.name}>`,
+        },
+      ],
+    });
+  }
 
   const details = evt.details ? `*Details*: ${evt.details}` : '';
 
@@ -38,38 +54,24 @@ export function generateEventRow(evt: Event): HomeView['blocks'] {
     : '';
 
   const location_address = evt.location_address
-    ? `*Address*: ${evt.location_address}`
-    : '';
-
-  const created_by = evt.created_by?.slack_data
-    ? `\nPosted by <@${evt.created_by.slack_data?.name}>\n`
+    ? `*Address: <https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        evt.location_address
+      )}|${evt.location_address}>*`
     : '';
 
   const textBlock: HomeView['blocks'][number] = {
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: [
-        formattedDate,
-        details,
-        location_name,
-        location_address,
-        created_by,
-      ].join('\n'),
+      text: [formattedDate, details, location_name, location_address].join(
+        '\n'
+      ),
     },
   };
 
-  if (evt.location_address) {
-    textBlock.accessory = {
-      type: 'button',
-      text: { type: 'plain_text', text: 'Directions :car:' },
-      url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        evt.location_address
-      )}`,
-    };
-  }
-
   eventRows.push(textBlock);
+
+  eventRows.push(...generateRSVPStatus(evt.id));
   eventRows.push(...generateRSVPButtons(evt));
   eventRows.push({ type: 'divider' });
 

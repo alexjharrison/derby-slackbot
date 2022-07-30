@@ -1,6 +1,7 @@
 import type { Handler } from '@netlify/functions';
 import { ReceiverEvent } from '@slack/bolt';
 import { app } from '../../config/slack';
+import { log } from '../../utils/log';
 
 const handler: Handler = async event => {
   let payload: any = {};
@@ -38,9 +39,9 @@ const handler: Handler = async event => {
 
   try {
     await app.processEvent(slackEvent);
-  } catch (e) {
+  } catch (e: any) {
     console.log('Caught the error woo');
-    console.error(e);
+    log(e.data?.response_metadata?.messages);
   }
 
   return {
