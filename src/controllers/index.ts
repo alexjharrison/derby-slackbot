@@ -3,7 +3,6 @@ import { initLogger } from '../middleware/logger';
 import { syncSlackUsers } from '../middleware/sync-users';
 import { appHomeOpened } from './app-home-opened';
 import { openAdminModal } from './open-admin-modal';
-import { openEventRsvpList } from './open-event-rsvp-list';
 import { handleRSVPResponse } from './rsvp-response';
 import { toggleAdmin } from './toggle-admin';
 
@@ -14,7 +13,6 @@ export function registerEvents(app: App) {
     initLogger,
     syncSlackUsers,
     appHomeOpened,
-    openEventRsvpList,
     handleRSVPResponse,
     openAdminModal,
     toggleAdmin,
