@@ -18,11 +18,15 @@ export async function fetchEventById(id: number) {
   return res.data;
 }
 
+export async function deleteEventyById(id: number) {
+  return db.from<Event>('events').delete().eq('id', id);
+}
+
 export async function fetchUpcomingEvents() {
   let upcomingEvents = await db
     .from<Event>('events')
     .select('*')
-    .order('end_date', { ascending: false })
+    .order('end_date', { ascending: true })
     .gt('end_date', new Date().toUTCString());
 
   return (upcomingEvents.data || [])?.map(attachCreatedByUser);

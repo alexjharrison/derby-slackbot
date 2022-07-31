@@ -1,6 +1,7 @@
 import { HomeView } from '@slack/bolt';
 import { format } from 'date-fns';
 import { Event } from '../../models/event/event.interface';
+import { userStore } from '../../models/user/user.store';
 import { capitalize } from '../../utils/text';
 import { generateRSVPButtons } from './rsvp-buttons';
 import { generateRSVPStatus } from './rsvp-status';
@@ -38,7 +39,7 @@ export function generateEventRow(evt: Event): HomeView['blocks'] {
     });
   }
 
-  const details = evt.details ? `*Details*: ${evt.details}` : '';
+  const details = evt.details ? `*Details*: ${evt.details}\n` : '';
 
   const formattedDate =
     (evt.start_date
@@ -73,6 +74,47 @@ export function generateEventRow(evt: Event): HomeView['blocks'] {
 
   eventRows.push(...generateRSVPStatus(evt.id));
   eventRows.push(...generateRSVPButtons(evt));
+
+  if (userStore.getCurrentUser().is_admin) {
+    eventRows.push({
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          action_id: 'open_event_modal',
+          value: `${evt.id}`,
+          text: {
+            text: ':pencil:  Edit Event',
+            type: 'plain_text',
+          },
+        },
+        {
+          type: 'button',
+          style: 'danger',
+          value: `${evt.id}`,
+          action_id: 'delete_event',
+          text: {
+            text: ':x:  Delete Event',
+            type: 'plain_text',
+          },
+          confirm: {
+            text: {
+              text: `Are you sure you want to delete ${evt.title}?`,
+              type: 'mrkdwn',
+            },
+            title: {
+              text: 'Confirm Delete',
+              type: 'plain_text',
+            },
+            confirm: { text: 'Delete', type: 'plain_text' },
+            deny: { text: 'Cancel', type: 'plain_text' },
+            style: 'danger',
+          },
+        },
+      ],
+    });
+  }
+
   eventRows.push({ type: 'divider' });
 
   return eventRows;

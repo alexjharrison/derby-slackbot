@@ -19,7 +19,7 @@ export const homeAdminView: HomeView['blocks'] = [
           text: 'Create an Event',
         },
         style: 'primary',
-        value: 'open_event_create_modal',
+        action_id: 'open_event_modal',
       },
       {
         type: 'button',
