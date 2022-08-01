@@ -8,13 +8,17 @@ export function deleteExpiredDms(app: App) {
     const dms = dmResp.data || [];
 
     if (dms.length > 0) {
-      deleteDms(dms.map(dm => dm.id));
+      await deleteDms(dms.map(dm => dm.id));
 
       dms.forEach(async dm => {
-        await client.chat.delete({
-          channel: dm.channel_id,
-          ts: dm.timestamp,
-        });
+        try {
+          await client.chat.delete({
+            channel: dm.channel_id,
+            ts: dm.timestamp,
+          });
+        } catch (e: any) {
+          console.log(e?.message);
+        }
       });
     }
 

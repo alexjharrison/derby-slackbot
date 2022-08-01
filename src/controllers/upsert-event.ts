@@ -1,11 +1,14 @@
 import { App } from '@slack/bolt';
 import { set } from 'date-fns';
 import { DirectMessage } from '../models/dm/dm.interface';
+import { createDm } from '../models/dm/dm.service';
 import { Event } from '../models/event/event.interface';
 import { saveEvent } from '../models/event/event.service';
 import { userStore } from '../models/user/user.store';
 import { generateHomeView } from '../views/home-sections';
 import { generateEventRow } from '../views/home-sections/event';
+import { generateRSVPButtons } from '../views/home-sections/rsvp-buttons';
+import { modalStore } from '../views/modals/modal-store';
 
 export function upsertEvent(app: App) {
   app.view('event_edit_modal', async ({ ack, payload, body, client }) => {
@@ -59,7 +62,7 @@ export function upsertEvent(app: App) {
     if (!event?.id && savedEvent?.[0]) {
       const dms: Partial<DirectMessage>[] = [];
 
-      userStore.users.forEach(async user => {
+      const promises = userStore.users.map(async user => {
         const conversation = await client.conversations.open({
           users: user.uid,
         });
@@ -84,11 +87,23 @@ RSVP here or browse upcoming events in the Home tab of EventBot
               },
             },
             ...generateEventRow(savedEvent[0], false),
+            ...generateRSVPButtons(savedEvent[0]),
           ],
         });
 
-        dms.push({});
+        dms.push({
+          expiry_date: event.end_date || event.start_date,
+          user_uid: user.uid,
+          channel_id: conversation.channel.id,
+          event_id: savedEvent?.[0].id,
+          timestamp: res.ts,
+        });
       });
+
+      await Promise.allSettled(promises);
+
+      const dmRes = await createDm(dms);
+      console.log(dmRes);
     }
   });
 }

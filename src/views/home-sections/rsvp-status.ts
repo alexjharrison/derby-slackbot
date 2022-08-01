@@ -38,7 +38,7 @@ export function generateRSVPStatus(eventId: number): Blocks {
         type: 'mrkdwn',
         text:
           ':white_check_mark: *Attending*: ' +
-          (userStatuses.attendingNames.join(', ') || '¯\\_(ツ)_/¯'),
+          (userStatuses.attendingNames.join(', ') || '*¯\\_(ツ)_/¯*'),
       },
     },
     {
@@ -47,7 +47,7 @@ export function generateRSVPStatus(eventId: number): Blocks {
         type: 'mrkdwn',
         text:
           ':no_entry_sign: *Not Attending*: ' +
-          (userStatuses.notAttendingNames.join(', ') || '¯\\_(ツ)_/¯'),
+          (userStatuses.notAttendingNames.join(', ') || '*¯\\_(ツ)_/¯*'),
       },
     },
     {
@@ -56,7 +56,7 @@ export function generateRSVPStatus(eventId: number): Blocks {
         type: 'mrkdwn',
         text:
           ':question: *TBD*: ' +
-          (userStatuses.unsureNames.join(', ') || '¯\\_(ツ)_/¯'),
+          (userStatuses.unsureNames.join(', ') || '*¯\\_(ツ)_/¯*'),
       },
     },
   ];

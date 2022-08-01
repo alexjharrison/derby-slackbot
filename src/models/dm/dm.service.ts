@@ -5,13 +5,20 @@ export function fetchExpiredDms() {
   return db
     .from<DirectMessage>('dms')
     .select('*')
-    .gt('expiry_date', new Date().toUTCString());
+    .lt('expiry_date', new Date().toUTCString());
 }
 
 export function createDm(
   dms: Partial<DirectMessage> | Partial<DirectMessage>[]
 ) {
   return db.from<DirectMessage>('dms').insert(dms);
+}
+
+export function fetchDm(eventId: number, uid: string) {
+  return db
+    .from<DirectMessage>('dms')
+    .select('*')
+    .match({ user_uid: uid, event_id: eventId });
 }
 
 export function deleteDm(dmId: number) {

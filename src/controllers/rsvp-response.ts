@@ -5,8 +5,10 @@ import {
   SlackActionMiddlewareArgs,
 } from '@slack/bolt';
 import { RsvpStatus } from '../config/constants';
+import { deleteDm, fetchDm } from '../models/dm/dm.service';
 import { fetchEventById } from '../models/event/event.service';
 import { fetchUserByUid, updateRSVP } from '../models/user/user.service';
+import { capitalize } from '../utils/text';
 import { generateHomeView } from '../views/home-sections';
 import { generateEventRow } from '../views/home-sections/event';
 import { modalStore } from '../views/modals/modal-store';
@@ -20,7 +22,7 @@ export function handleRSVPResponse(app: App) {
 }
 
 function saveRSVP(rsvpStatus: RsvpStatus): ActionFn {
-  return async ({ client, body, ack, payload }) => {
+  return async ({ client, body, ack, payload, say }) => {
     await ack();
     if (
       payload.type !== 'button' ||
@@ -37,7 +39,8 @@ function saveRSVP(rsvpStatus: RsvpStatus): ActionFn {
 
     const event = await fetchEventById(eventId);
 
-    if (event) {
+    if (!event) return;
+    if ('view' in body && body.view?.type === 'modal') {
       await client.views.update({
         view_id: modalStore.latestModalId,
         view: {
@@ -47,14 +50,43 @@ function saveRSVP(rsvpStatus: RsvpStatus): ActionFn {
             text: 'Event Details',
             type: 'plain_text',
           },
-          blocks: generateEventRow(event),
+          blocks: [{ type: 'divider' }, ...generateEventRow(event)],
         },
+      });
+
+      await client.views.publish({
+        user_id: uid,
+        view: await generateHomeView(),
       });
     }
 
-    await client.views.publish({
-      user_id: uid,
-      view: await generateHomeView(),
-    });
+    //delete dm replace with message
+    const res = await fetchDm(event.id, uid);
+    const dm = res.body?.[0];
+    console.log(dm);
+    if (!dm) return;
+    try {
+      await client.chat.delete({
+        channel: dm.channel_id,
+        ts: dm.timestamp,
+      });
+
+      await deleteDm(dm.id);
+
+      const response =
+        rsvpStatus === 'accepted'
+          ? 'Glad to see you there'
+          : rsvpStatus === 'rejected'
+          ? "Sorry you can't make it"
+          : rsvpStatus === 'unsure'
+          ? ''
+          : '';
+
+      await say(
+        `RSVP confirmed for *${event.title}*\n${response}\n\nGo to the Home tab if you want to change your RSVP status for the event`
+      );
+    } catch (e: any) {
+      console.log(e?.message);
+    }
   };
 }
