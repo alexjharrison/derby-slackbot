@@ -24,6 +24,7 @@ export function upsertEvent(app: App) {
     const endDatetime = endTime && new Date(`${date}T${endTime}:00.000`);
 
     event.start_date = startDatetime.toUTCString();
+    event.created_by_user_id = body.user.id;
 
     if (payload.private_metadata) {
       event.id = +payload.private_metadata;

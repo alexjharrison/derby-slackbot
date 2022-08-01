@@ -1,5 +1,6 @@
 import { App } from '@slack/bolt';
 import { deleteEventyById } from '../models/event/event.service';
+import { removeEventFromAllUsers } from '../models/user/user.service';
 import { userStore } from '../models/user/user.store';
 import { generateHomeView } from '../views/home-sections';
 
@@ -12,6 +13,7 @@ export function deleteEvent(app: App) {
     const uid = userStore.getCurrentUser().uid;
 
     await deleteEventyById(eventId);
+    await removeEventFromAllUsers(eventId);
 
     client.views.publish({
       user_id: uid,

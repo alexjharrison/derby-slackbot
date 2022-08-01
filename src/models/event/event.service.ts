@@ -15,7 +15,9 @@ export async function fetchEventById(id: number) {
     .eq('id', id)
     .maybeSingle();
 
-  return res.data;
+  const event = res.data && attachCreatedByUser(res.data);
+
+  return event;
 }
 
 export async function deleteEventyById(id: number) {
@@ -26,18 +28,19 @@ export async function fetchUpcomingEvents() {
   let upcomingEvents = await db
     .from<Event>('events')
     .select('*')
-    .order('end_date', { ascending: true })
-    .gt('end_date', new Date().toUTCString());
+    .order('start_date', { ascending: true })
+    .gt('start_date', new Date().toUTCString());
 
   return (upcomingEvents.data || [])?.map(attachCreatedByUser);
 }
 
-export async function fetchPastEvents() {
+export async function fetchPastEvents(limit = 20) {
   const pastEvents = await db
     .from<Event>('events')
     .select('*')
-    .order('end_date', { ascending: false })
-    .lte('end_date', new Date().toUTCString());
+    .order('start_date', { ascending: false })
+    .lte('start_date', new Date().toUTCString())
+    .limit(limit);
 
   return (pastEvents.data || []).map(attachCreatedByUser);
 }

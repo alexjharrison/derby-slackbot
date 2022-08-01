@@ -3,7 +3,6 @@ import { format } from 'date-fns';
 import { Event } from '../../models/event/event.interface';
 import { getEventStatusByUser } from '../../models/user/user.service';
 import { userStore } from '../../models/user/user.store';
-import { generateRSVPButtons } from './rsvp-buttons';
 
 export function generateCompactEventView(evt: Event): HomeView['blocks'] {
   const formattedDate =
@@ -30,21 +29,29 @@ export function generateCompactEventView(evt: Event): HomeView['blocks'] {
       type: 'section',
       fields: [
         {
-          text: `*${evt.title}*\n\n${formattedDate} *Location*: ${evt.location_name}`,
+          text: `*${evt.title}*\n${formattedDate}*Location*: ${evt.location_name}`,
+          type: 'mrkdwn',
+        },
+        {
+          text: `‎*Attending*:  ${attendanceEmoji}`,
+          type: 'mrkdwn',
+        },
+        {
+          text: `‎\n`,
           type: 'mrkdwn',
         },
       ],
       accessory: {
         type: 'button',
         text: {
-          text: 'More Info',
+          text: 'More Info / RSVP',
           type: 'plain_text',
         },
+        style: 'primary',
         action_id: 'open_event_detail_modal',
         value: `${evt.id}`,
       },
     },
-    ...generateRSVPButtons(evt),
     { type: 'divider' },
   ];
 

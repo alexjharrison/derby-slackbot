@@ -1,8 +1,5 @@
 import { HomeView } from '@slack/bolt';
 import { Event } from '../../models/event/event.interface';
-import { format } from 'date-fns';
-import { generateRSVPButtons } from './rsvp-buttons';
-import { generateEventRow } from './event';
 import { paddingView } from '../padding';
 import { generateCompactEventView } from './event-compact';
 
@@ -21,7 +18,6 @@ export function generateEventList(
 
     { type: 'divider' },
 
-    // ...events.flatMap(event => generateEventRow(event)),
     ...events.flatMap(event => generateCompactEventView(event)),
   ];
 

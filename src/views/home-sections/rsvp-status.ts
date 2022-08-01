@@ -36,55 +36,30 @@ export function generateRSVPStatus(eventId: number): Blocks {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: ':white_check_mark: *Attending*:',
+        text:
+          ':white_check_mark: *Attending*: ' +
+          (userStatuses.attendingNames.join(', ') || '¯\\_(ツ)_/¯'),
       },
-    },
-    {
-      type: 'context',
-      elements: [
-        {
-          type: 'mrkdwn',
-          text: userStatuses.attendingNames.join(', '),
-        },
-      ],
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: ':no_entry_sign: *Not Attending*:',
+        text:
+          ':no_entry_sign: *Not Attending*: ' +
+          (userStatuses.notAttendingNames.join(', ') || '¯\\_(ツ)_/¯'),
       },
-    },
-    {
-      type: 'context',
-      elements: [
-        {
-          type: 'mrkdwn',
-          text: userStatuses.notAttendingNames.join(', '),
-        },
-      ],
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: ':question: *TBD*:',
+        text:
+          ':question: *TBD*: ' +
+          (userStatuses.unsureNames.join(', ') || '¯\\_(ツ)_/¯'),
       },
     },
-    {
-      type: 'context',
-      elements: [
-        {
-          type: 'mrkdwn',
-          text: userStatuses.unsureNames.join(', '),
-        },
-      ],
-    },
-  ].filter(
-    // slack errors if text string is '', take them out
-    block =>
-      block.type === 'section' || block.elements?.every(({ text }) => text)
-  );
+  ];
 
   return view;
 }

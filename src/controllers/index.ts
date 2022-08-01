@@ -6,7 +6,7 @@ import { appHomeOpened } from './app-home-opened';
 import { deleteEvent } from './delete-event';
 import { openAdminModal } from './open-admin-modal';
 import { openEventDetailModal } from './open-event-detail-modal';
-import { openEventModal } from './open-event-modal';
+import { openEventEditModal } from './open-event-edit-modal';
 import { handleRSVPResponse } from './rsvp-response';
 import { toggleAdmin } from './toggle-admin';
 import { upsertEvent } from './upsert-event';
@@ -21,7 +21,7 @@ export function registerEvents(app: App) {
     appHomeOpened,
     handleRSVPResponse,
     openAdminModal,
-    openEventModal,
+    openEventEditModal,
     openEventDetailModal,
     deleteEvent,
     upsertEvent,

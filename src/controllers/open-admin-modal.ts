@@ -1,6 +1,7 @@
 import { App } from '@slack/bolt';
 import { log } from '../utils/log';
 import { adminListView } from '../views/modals/admin-list-modal';
+import { modalStore } from '../views/modals/modal-store';
 
 export function openAdminModal(app: App) {
   app.action(
@@ -15,10 +16,12 @@ export function openAdminModal(app: App) {
       )
         return;
 
-      await client.views.open({
+      const res = await client.views.open({
         trigger_id: body.trigger_id,
         view: adminListView(body.user.id),
       });
+
+      modalStore.latestModalId = res.view?.id || '';
     }
   );
 }

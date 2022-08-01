@@ -5,8 +5,11 @@ import {
   SlackActionMiddlewareArgs,
 } from '@slack/bolt';
 import { RsvpStatus } from '../config/constants';
+import { fetchEventById } from '../models/event/event.service';
 import { fetchUserByUid, updateRSVP } from '../models/user/user.service';
 import { generateHomeView } from '../views/home-sections';
+import { generateEventRow } from '../views/home-sections/event';
+import { modalStore } from '../views/modals/modal-store';
 
 type ActionFn = Middleware<SlackActionMiddlewareArgs<SlackAction>>;
 
@@ -32,7 +35,24 @@ function saveRSVP(rsvpStatus: RsvpStatus): ActionFn {
     const me = fetchUserByUid(uid);
     await updateRSVP(eventId, rsvpStatus, me);
 
-    client.views.publish({
+    const event = await fetchEventById(eventId);
+
+    if (event) {
+      await client.views.update({
+        view_id: modalStore.latestModalId,
+        view: {
+          type: 'modal',
+          callback_id: 'event_detail_modal',
+          title: {
+            text: 'Event Details',
+            type: 'plain_text',
+          },
+          blocks: generateEventRow(event),
+        },
+      });
+    }
+
+    await client.views.publish({
       user_id: uid,
       view: await generateHomeView(),
     });

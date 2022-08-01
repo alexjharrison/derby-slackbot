@@ -60,6 +60,20 @@ export function fetchUserByUid(uid: string) {
   return userStore.users.find(user => user.uid === uid);
 }
 
+export function removeEventFromAllUsers(eventId: number) {
+  const userData: Partial<User>[] = userStore.users.map(user => {
+    const { slack_data, ...rest } = user;
+    return {
+      ...rest,
+      accepted_events: user.accepted_events.filter(id => id !== eventId),
+      rejected_events: user.rejected_events.filter(id => id !== eventId),
+      undecided_events: user.undecided_events.filter(id => id !== eventId),
+    };
+  });
+
+  return db.from<User>('users').upsert(userData);
+}
+
 export function getEventStatusByUser(
   eventId: number,
   user: User

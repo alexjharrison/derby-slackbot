@@ -4,6 +4,7 @@ import {
   fetchDbUsers,
   fetchSlackUsers,
   insertUsers,
+  removeEventFromAllUsers,
   updateRSVP,
 } from '../models/user/user.service';
 import { userStore } from '../models/user/user.store';

@@ -116,11 +116,10 @@ export function generateEventRow(
             style: 'danger',
           },
         },
+        // { type: 'divider' },
       ],
     });
   }
-
-  eventRows.push({ type: 'divider' });
 
   return eventRows;
 }
