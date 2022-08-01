@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { generateRSVPButtons } from './rsvp-buttons';
 import { generateEventRow } from './event';
 import { paddingView } from '../padding';
+import { generateCompactEventView } from './event-compact';
 
 export function generateEventList(
   headerText: string,
@@ -20,7 +21,8 @@ export function generateEventList(
 
     { type: 'divider' },
 
-    ...events.flatMap(event => generateEventRow(event)),
+    // ...events.flatMap(event => generateEventRow(event)),
+    ...events.flatMap(event => generateCompactEventView(event)),
   ];
 
   if (events.length === 0) {

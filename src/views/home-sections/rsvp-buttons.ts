@@ -42,24 +42,24 @@ export function generateRSVPButtons(evt: Event): HomeView['blocks'] {
     },
   ];
 
-  const text =
-    status === 'accepted'
-      ? '*Your Status*: Attending'
-      : status === 'rejected'
-      ? '*Your Status*: Not Attending'
-      : status === 'unsure'
-      ? '*Your Status*: TBD'
-      : '';
+  // const text =
+  //   status === 'accepted'
+  //     ? '*Your Status*: Attending'
+  //     : status === 'rejected'
+  //     ? '*Your Status*: Not Attending'
+  //     : status === 'unsure'
+  //     ? '*Your Status*: TBD'
+  //     : '';
 
-  if (status) {
-    buttons.unshift({
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text,
-      },
-    });
-  }
+  // if (status) {
+  //   buttons.unshift({
+  //     type: 'section',
+  //     text: {
+  //       type: 'mrkdwn',
+  //       text,
+  //     },
+  //   });
+  // }
 
   return buttons;
 }

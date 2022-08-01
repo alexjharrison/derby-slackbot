@@ -5,6 +5,7 @@ import { syncSlackUsers } from '../middleware/sync-users';
 import { appHomeOpened } from './app-home-opened';
 import { deleteEvent } from './delete-event';
 import { openAdminModal } from './open-admin-modal';
+import { openEventDetailModal } from './open-event-detail-modal';
 import { openEventModal } from './open-event-modal';
 import { handleRSVPResponse } from './rsvp-response';
 import { toggleAdmin } from './toggle-admin';
@@ -16,11 +17,12 @@ export function registerEvents(app: App) {
   const listeners = [
     initLogger,
     syncSlackUsers,
-    // deleteExpiredDms,
+    deleteExpiredDms,
     appHomeOpened,
     handleRSVPResponse,
     openAdminModal,
     openEventModal,
+    openEventDetailModal,
     deleteEvent,
     upsertEvent,
     toggleAdmin,

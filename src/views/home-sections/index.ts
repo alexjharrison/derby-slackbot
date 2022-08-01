@@ -20,8 +20,6 @@ export async function generateHomeView(): Promise<HomeView> {
         homeHeaderView,
         homeAdminView,
         generateEventList('Upcoming Events', futureEvents),
-        generateEventList('Past Events', pastEvents),
-        generateEventList('Past Events', pastEvents),
         generateEventList('Past Events', pastEvents)
       )
     : render(
