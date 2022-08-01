@@ -20,7 +20,7 @@ export function generateEventList(
 
     { type: 'divider' },
 
-    ...events.flatMap(generateEventRow),
+    ...events.flatMap(event => generateEventRow(event)),
   ];
 
   if (events.length === 0) {

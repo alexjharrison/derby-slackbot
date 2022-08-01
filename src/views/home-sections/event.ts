@@ -6,7 +6,10 @@ import { capitalize } from '../../utils/text';
 import { generateRSVPButtons } from './rsvp-buttons';
 import { generateRSVPStatus } from './rsvp-status';
 
-export function generateEventRow(evt: Event): HomeView['blocks'] {
+export function generateEventRow(
+  evt: Event,
+  isHomeView = true
+): HomeView['blocks'] {
   const eventRows: HomeView['blocks'] = [];
 
   if (evt.title)
@@ -72,10 +75,12 @@ export function generateEventRow(evt: Event): HomeView['blocks'] {
 
   eventRows.push(textBlock);
 
-  eventRows.push(...generateRSVPStatus(evt.id));
-  eventRows.push(...generateRSVPButtons(evt));
+  if (isHomeView) {
+    eventRows.push(...generateRSVPStatus(evt.id));
+    eventRows.push(...generateRSVPButtons(evt));
+  }
 
-  if (userStore.getCurrentUser().is_admin) {
+  if (userStore.getCurrentUser().is_admin && isHomeView) {
     eventRows.push({
       type: 'actions',
       elements: [

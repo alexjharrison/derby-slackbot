@@ -1,4 +1,5 @@
 import { App } from '@slack/bolt';
+import { deleteExpiredDms } from '../middleware/delete-expired-dms';
 import { initLogger } from '../middleware/logger';
 import { syncSlackUsers } from '../middleware/sync-users';
 import { appHomeOpened } from './app-home-opened';
@@ -15,6 +16,7 @@ export function registerEvents(app: App) {
   const listeners = [
     initLogger,
     syncSlackUsers,
+    // deleteExpiredDms,
     appHomeOpened,
     handleRSVPResponse,
     openAdminModal,
