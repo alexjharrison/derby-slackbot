@@ -18,11 +18,11 @@ export function syncSlackUsers(app: App) {
     } else if ('user' in body && 'id' in body.user) {
       uid = body.user.id;
     } else {
-      console.log("Didn't sync users");
+      // console.log("Didn't sync users");
       await next();
       return;
     }
-    console.log('Users synced');
+    // console.log('Users synced');
 
     let dbUsers = await fetchDbUsers();
     const slackUsers = await fetchSlackUsers();

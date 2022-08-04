@@ -29,7 +29,9 @@ export function generateCompactEventView(evt: Event): HomeView['blocks'] {
       type: 'section',
       fields: [
         {
-          text: `*${evt.title}*\n${formattedDate}*Location*: ${evt.location_name}`,
+          text:
+            `*${evt.title}*\n${formattedDate}\n` +
+            (evt.location_name ? `*Location*: ${evt.location_name}` : ''),
           type: 'mrkdwn',
         },
         {

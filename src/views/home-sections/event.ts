@@ -16,7 +16,7 @@ export function generateEventRow(
     eventRows.push({
       type: 'header',
       text: {
-        text: `${capitalize(evt.title)}`,
+        text: `${capitalize(evt.title || '')}`,
         type: 'plain_text',
       },
     });

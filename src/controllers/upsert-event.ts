@@ -1,5 +1,6 @@
 import { App } from '@slack/bolt';
 import { set } from 'date-fns';
+import { FORMERR } from 'dns';
 import { DirectMessage } from '../models/dm/dm.interface';
 import { createDm } from '../models/dm/dm.service';
 import { Event } from '../models/event/event.interface';
@@ -8,7 +9,6 @@ import { userStore } from '../models/user/user.store';
 import { generateHomeView } from '../views/home-sections';
 import { generateEventRow } from '../views/home-sections/event';
 import { generateRSVPButtons } from '../views/home-sections/rsvp-buttons';
-import { modalStore } from '../views/modals/modal-store';
 
 export function upsertEvent(app: App) {
   app.view('event_edit_modal', async ({ ack, payload, body, client }) => {
@@ -29,6 +29,9 @@ export function upsertEvent(app: App) {
     event.start_date = startDatetime.toUTCString();
     event.created_by_user_id = body.user.id;
 
+    const formatText = (blockId: keyof Event, length = 150) =>
+      state[blockId].data.value?.replaceAll('+', ' ').slice(0, length);
+
     if (payload.private_metadata) {
       event.id = +payload.private_metadata;
     }
@@ -36,19 +39,16 @@ export function upsertEvent(app: App) {
       event.end_date = endDatetime.toUTCString();
     }
     if (state.title.data.value) {
-      event.title = state.title.data.value.replaceAll('+', ' ');
+      event.title = formatText('title');
     }
     if (state.details.data.value) {
-      event.details = state.details.data.value.replaceAll('+', ' ');
+      event.details = formatText('details', 500);
     }
     if (state.location_name.data.value) {
-      event.location_name = state.location_name.data.value.replaceAll('+', ' ');
+      event.location_name = formatText('location_name');
     }
     if (state.location_address.data.value) {
-      event.location_address = state.location_address.data.value.replaceAll(
-        '+',
-        ' '
-      );
+      event.location_address = formatText('location_address', 255);
     }
 
     const savedEvent = (await saveEvent(event)).data;
@@ -103,7 +103,7 @@ RSVP here or browse upcoming events in the Home tab of EventBot
       await Promise.allSettled(promises);
 
       const dmRes = await createDm(dms);
-      console.log(dmRes);
+      // console.log(dmRes);
     }
   });
 }

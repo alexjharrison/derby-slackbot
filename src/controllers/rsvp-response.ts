@@ -8,7 +8,6 @@ import { RsvpStatus } from '../config/constants';
 import { deleteDm, fetchDm } from '../models/dm/dm.service';
 import { fetchEventById } from '../models/event/event.service';
 import { fetchUserByUid, updateRSVP } from '../models/user/user.service';
-import { capitalize } from '../utils/text';
 import { generateHomeView } from '../views/home-sections';
 import { generateEventRow } from '../views/home-sections/event';
 import { modalStore } from '../views/modals/modal-store';
@@ -63,7 +62,7 @@ function saveRSVP(rsvpStatus: RsvpStatus): ActionFn {
     //delete dm replace with message
     const res = await fetchDm(event.id, uid);
     const dm = res.body?.[0];
-    console.log(dm);
+    // console.log(dm);
     if (!dm) return;
     try {
       await client.chat.delete({
