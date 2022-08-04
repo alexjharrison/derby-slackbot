@@ -1,3 +1,4 @@
+import { reactive } from '@vue/reactivity';
 import { User } from './user.interface';
 
 interface UserStore {
@@ -6,8 +7,8 @@ interface UserStore {
   getCurrentUser(): User;
 }
 
-export const userStore: UserStore = {
+export const userStore: UserStore = reactive({
   users: [],
   currentUserIdx: -1,
   getCurrentUser: () => userStore.users[userStore.currentUserIdx],
-};
+});
