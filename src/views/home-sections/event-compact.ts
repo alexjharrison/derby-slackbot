@@ -14,7 +14,7 @@ export function generateCompactEventView(evt: Event): HomeView['blocks'] {
       : '') +
     (evt.end_date ? ` - ${format(new Date(evt.end_date), 'p')}\n` : '');
 
-  const status = getEventStatusByUser(evt.id, userStore.getCurrentUser());
+  const status = getEventStatusByUser(evt.id, userStore.currentUser);
   const attendanceEmoji =
     status === 'accepted'
       ? ':white_check_mark:'

@@ -88,7 +88,7 @@ export function generateEventRow(
     eventRows.push(...generateRSVPButtons(evt));
   }
 
-  if (userStore.getCurrentUser().is_admin && isHomeView) {
+  if (userStore.currentUser.is_admin && isHomeView) {
     eventRows.push({
       type: 'actions',
       elements: [

@@ -5,7 +5,7 @@ import { getEventStatusByUser } from '../../models/user/user.service';
 import { userStore } from '../../models/user/user.store';
 
 export function generateRSVPButtons(evt: Event): HomeView['blocks'] {
-  const currentUser = userStore.getCurrentUser();
+  const currentUser = userStore.currentUser;
   const status = getEventStatusByUser(evt.id, currentUser);
 
   function getStyleByButton(buttonStatus: RsvpStatus): 'primary' | undefined {

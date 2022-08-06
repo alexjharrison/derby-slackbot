@@ -1,4 +1,5 @@
 import { App } from '@slack/bolt';
+import { testUser } from '../models/user/user.interface';
 import {
   deleteUsers,
   fetchDbUsers,
@@ -50,9 +51,12 @@ export function syncSlackUsers(app: App) {
       slack_data: slackUsers.find(slackUser => slackUser.id === dbUser.uid),
     }));
 
-    userStore.currentUserIdx = userStore.users.findIndex(
-      user => uid === user.uid
-    );
+    const currentUser = userStore.users.find(user => uid === user.uid);
+    if (currentUser) {
+      userStore.currentUser = currentUser;
+    } else {
+      throw new Error('Current User Not Found');
+    }
 
     await next();
   });

@@ -11,7 +11,7 @@ export function deleteEvent(app: App) {
 
     if (!('value' in payload)) return;
     const eventId = Number(payload.value);
-    const uid = userStore.getCurrentUser().uid;
+    const uid = userStore.currentUser?.uid;
 
     await deleteEventyById(eventId);
     await removeEventFromAllUsers(eventId);

@@ -12,7 +12,7 @@ import { homeHeaderView } from './header';
 export async function generateHomeView(): Promise<HomeView> {
   const futureEvents = await fetchUpcomingEvents();
   const pastEvents = await fetchPastEvents(40 - futureEvents.length);
-  const { is_admin } = userStore.getCurrentUser();
+  const { is_admin } = userStore.currentUser;
 
   return is_admin
     ? render(

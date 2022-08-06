@@ -81,7 +81,7 @@ export function upsertEvent(app: App) {
                 text: `
 *Hey @${user.slack_data?.name}!*
 
-<@${userStore.getCurrentUser().slack_data?.name}> added a new event
+<@${userStore.currentUser.slack_data?.name}> added a new event
 
 RSVP here or browse upcoming events in the Home tab of EventBot
 

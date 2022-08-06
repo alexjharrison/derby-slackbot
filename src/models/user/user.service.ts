@@ -90,7 +90,7 @@ export function getEventStatusByUser(
 export async function updateRSVP(
   eventId: number,
   newStatus: RsvpStatus,
-  userWithSlack: User = userStore.getCurrentUser()
+  userWithSlack: User = userStore.currentUser
 ) {
   const { slack_data, ...user } = userWithSlack;
 
