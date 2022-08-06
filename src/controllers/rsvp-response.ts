@@ -8,6 +8,7 @@ import { RsvpStatus } from '../config/constants';
 import { deleteDm, fetchDm } from '../models/dm/dm.service';
 import { fetchEventById } from '../models/event/event.service';
 import { fetchUserByUid, updateRSVP } from '../models/user/user.service';
+import { userStore } from '../models/user/user.store';
 import { generateHomeView } from '../views/home-sections';
 import { generateEventRow } from '../views/home-sections/event';
 import { modalStore } from '../views/modals/modal-store';
@@ -33,8 +34,8 @@ function saveRSVP(rsvpStatus: RsvpStatus): ActionFn {
     const eventId = Number(payload.value);
     if (!eventId) return;
 
-    const me = fetchUserByUid(uid);
-    await updateRSVP(eventId, rsvpStatus, me);
+    // const me = userStore.currentUser;
+    await updateRSVP(eventId, rsvpStatus);
 
     const event = await fetchEventById(eventId);
 

@@ -131,4 +131,7 @@ export async function updateRSVP(
     rejected_events: res.data?.[0].rejected_events || [],
     undecided_events: res.data?.[0].undecided_events || [],
   };
+
+  //update currentUser
+  userStore.currentUser = userStore.users[userIndex];
 }
