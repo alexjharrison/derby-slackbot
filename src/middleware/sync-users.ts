@@ -51,6 +51,8 @@ export function syncSlackUsers(app: App) {
       slack_data: slackUsers.find(slackUser => slackUser.id === dbUser.uid),
     }));
 
+    console.log({ uid, users: userStore.users });
+
     const currentUser = userStore.users.find(user => uid === user.uid);
     if (currentUser) {
       userStore.currentUser = currentUser;
