@@ -50,6 +50,9 @@ export function upsertEvent(app: App) {
     if (state.location_address.data.value) {
       event.location_address = formatText('location_address', 255);
     }
+    if (state.is_cancelled.data.selected_options) {
+      event.is_cancelled = state.is_cancelled.data.selected_options.length > 0;
+    }
 
     const savedEvent = (await saveEvent(event)).data;
 
@@ -59,7 +62,7 @@ export function upsertEvent(app: App) {
     });
 
     // DM everyone when a new event is created
-    if (!event?.id && savedEvent?.[0]) {
+    if (!event?.id && savedEvent?.[0] && event.is_cancelled === false) {
       const dms: Partial<DirectMessage>[] = [];
 
       const promises = userStore.users.map(async user => {

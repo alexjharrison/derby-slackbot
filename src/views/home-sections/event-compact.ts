@@ -46,7 +46,7 @@ export function generateCompactEventView(evt: Event): HomeView['blocks'] {
       accessory: {
         type: 'button',
         text: {
-          text: 'More Info / RSVP',
+          text: 'More Info' + (evt.is_cancelled ? '' : ' / RSVP'),
           type: 'plain_text',
         },
         style: 'primary',
@@ -56,6 +56,10 @@ export function generateCompactEventView(evt: Event): HomeView['blocks'] {
     },
     { type: 'divider' },
   ];
+
+  if (evt.is_cancelled && 'fields' in view?.[0] && view[0].fields?.[1]) {
+    view[0].fields[1].text = '*Status: Cancelled*';
+  }
 
   return view;
 }

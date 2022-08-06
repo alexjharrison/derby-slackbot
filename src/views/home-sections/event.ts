@@ -75,7 +75,15 @@ export function generateEventRow(
 
   eventRows.push(textBlock);
 
-  if (isHomeView) {
+  if (evt.is_cancelled) {
+    eventRows.push({
+      type: 'section',
+      text: {
+        text: '*Status: Cancelled*',
+        type: 'mrkdwn',
+      },
+    });
+  } else if (isHomeView) {
     eventRows.push(...generateRSVPStatus(evt.id));
     eventRows.push(...generateRSVPButtons(evt));
   }

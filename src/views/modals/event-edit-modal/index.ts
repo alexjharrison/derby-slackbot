@@ -149,6 +149,39 @@ export function EventEditView(event?: Event): ModalView {
           },
         },
       },
+      {
+        type: 'input',
+        optional: true,
+        block_id: 'is_cancelled',
+        label: {
+          text: 'Is Event Cancelled?',
+          type: 'plain_text',
+        },
+        element: {
+          action_id: 'data',
+          type: 'checkboxes',
+          ...(event?.is_cancelled && {
+            initial_options: [
+              {
+                text: {
+                  text: 'Cancelled',
+                  type: 'plain_text',
+                },
+                value: 'is_cancelled',
+              },
+            ],
+          }),
+          options: [
+            {
+              text: {
+                text: 'Cancelled',
+                type: 'plain_text',
+              },
+              value: 'is_cancelled',
+            },
+          ],
+        },
+      },
     ],
   };
 
