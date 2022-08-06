@@ -6,7 +6,7 @@ interface UserStore {
   currentUser: User;
 }
 
-export const userStore: UserStore = reactive({
+export const userStore: UserStore = {
   users: [],
   currentUser: testUser,
-});
+};
