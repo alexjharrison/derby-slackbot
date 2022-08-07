@@ -7,8 +7,8 @@ const expressReceiver = new ExpressReceiver({
 });
 
 const app = new App({
-  signingSecret: process.env.slackSigningSecret,
-  token: process.env.slackBotToken,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  token: process.env.SLACKBOT_TOKEN,
   receiver: expressReceiver,
 });
 
