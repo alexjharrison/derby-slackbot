@@ -20,7 +20,7 @@ export async function fetchEventById(id: number) {
   return event;
 }
 
-export async function deleteEventyById(id: number) {
+export async function deleteEventById(id: number) {
   return db.from<Event>('events').delete().eq('id', id);
 }
 

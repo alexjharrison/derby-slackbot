@@ -11,7 +11,7 @@ export function initLogger(app: App) {
       }
     }
 
-    console.dir({ payload /*  body*/ }, { depth: null });
+    // console.dir({ payload /*  body*/ }, { depth: null });
     await next();
   });
 }

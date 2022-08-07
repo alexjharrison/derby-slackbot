@@ -2,7 +2,6 @@ import { App } from '@slack/bolt';
 import { Event } from '../models/event/event.interface';
 import { fetchEventById } from '../models/event/event.service';
 import { generateEventRow } from '../views/home-sections/event';
-import { generateEventList } from '../views/home-sections/events';
 import { modalStore } from '../views/modals/modal-store';
 
 export function openEventDetailModal(app: App) {

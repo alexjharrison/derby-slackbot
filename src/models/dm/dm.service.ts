@@ -27,3 +27,10 @@ export function deleteDm(dmId: number) {
 export function deleteDms(dmIds: number[]) {
   return db.from<DirectMessage>('dms').delete().in('id', dmIds);
 }
+
+export function fetchDmsByEvent(eventId: number) {
+  return db.from<DirectMessage>('dms').select('*').eq('event_id', eventId);
+}
+export function deleteDmsByEvent(eventId: number) {
+  return db.from<DirectMessage>('dms').delete().eq('event_id', eventId);
+}

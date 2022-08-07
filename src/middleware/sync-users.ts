@@ -1,12 +1,9 @@
 import { App } from '@slack/bolt';
-import { testUser } from '../models/user/user.interface';
 import {
   deleteUsers,
   fetchDbUsers,
   fetchSlackUsers,
   insertUsers,
-  removeEventFromAllUsers,
-  updateRSVP,
 } from '../models/user/user.service';
 import { userStore } from '../models/user/user.store';
 
@@ -50,8 +47,6 @@ export function syncSlackUsers(app: App) {
       ...dbUser,
       slack_data: slackUsers.find(slackUser => slackUser.id === dbUser.uid),
     }));
-
-    console.log({ uid, users: userStore.users });
 
     const currentUser = userStore.users.find(user => uid === user.uid);
     if (currentUser) {

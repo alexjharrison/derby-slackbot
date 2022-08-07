@@ -1,5 +1,4 @@
 import { App } from '@slack/bolt';
-import { log } from '../utils/log';
 import { adminListView } from '../views/modals/admin-list-modal';
 import { modalStore } from '../views/modals/modal-store';
 

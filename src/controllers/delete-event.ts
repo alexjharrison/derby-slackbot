@@ -1,5 +1,6 @@
 import { App } from '@slack/bolt';
-import { deleteEventyById } from '../models/event/event.service';
+import { deleteDmsByEvent, fetchDmsByEvent } from '../models/dm/dm.service';
+import { deleteEventById } from '../models/event/event.service';
 import { removeEventFromAllUsers } from '../models/user/user.service';
 import { userStore } from '../models/user/user.store';
 import { generateHomeView } from '../views/home-sections';
@@ -13,7 +14,22 @@ export function deleteEvent(app: App) {
     const eventId = Number(payload.value);
     const uid = userStore.currentUser?.uid;
 
-    await deleteEventyById(eventId);
+    const dmsToDelete = (await fetchDmsByEvent(eventId)).data;
+
+    try {
+      dmsToDelete?.forEach(async dm => {
+        await client.chat.delete({
+          channel: dm.channel_id,
+          ts: dm.timestamp,
+        });
+      });
+    } catch (e) {
+      console.log('failed to delete dm after deleting event');
+    }
+
+    await deleteDmsByEvent(eventId);
+
+    await deleteEventById(eventId);
     await removeEventFromAllUsers(eventId);
 
     await client.views.update({
