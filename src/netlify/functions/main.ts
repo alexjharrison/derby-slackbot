@@ -6,6 +6,13 @@ import { log } from '../../utils/log';
 const handler: Handler = async event => {
   let payload: any = {};
 
+  console.log({
+    SUPABASE_KEY: process.env.SUPABASE_KEY,
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SLACKBOT_TOKEN: process.env.SLACKBOT_TOKEN,
+    SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
+  });
+
   const body = (event.body || '').replace('payload=', '');
   try {
     payload = JSON.parse(decodeURIComponent(body));
