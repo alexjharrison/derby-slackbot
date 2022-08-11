@@ -73,7 +73,7 @@ export function upsertEvent(app: App) {
 
           const res = await client.chat.postMessage({
             channel: conversation.channel.id,
-            text: `New Event Created: ${event.title}`,
+            text: `New Event Created: ${event.title || ''}`,
             blocks: [
               {
                 type: 'divider',

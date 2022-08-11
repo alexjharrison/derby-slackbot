@@ -1,26 +1,14 @@
-import { App, BlockAction, Option } from '@slack/bolt';
-import { toggleAdminStatus } from '../models/user/user.service';
-import { userStore } from '../models/user/user.store';
+import { App, ViewSubmitAction } from '@slack/bolt';
+import { addAllAdmins, removeAllAdmins } from '../models/user/user.service';
 
 export function toggleAdmin(app: App) {
-  app.action<BlockAction>(
-    /^admin-toggle/,
-    async ({ ack, payload, body, client }) => {
-      await ack();
+  app.view<ViewSubmitAction>('admin_modal', async ({ ack, payload, body }) => {
+    await ack();
 
-      if (
-        !('selected_options' in body.actions[0]) ||
-        !('action_id' in body.actions[0])
-      )
-        return;
+    const adminUserUids = payload.state.values.data.data.selected_users || [];
+    adminUserUids.push(body.user.id);
 
-      const uid = body.actions[0].action_id.replace('admin-toggle-', '');
-      const newAdminStatus =
-        (body.actions[0]?.selected_options as Option[]).length > 0;
-
-      if (uid) {
-        await toggleAdminStatus(uid, newAdminStatus);
-      }
-    }
-  );
+    await removeAllAdmins();
+    await addAllAdmins(adminUserUids);
+  });
 }

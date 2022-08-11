@@ -2,7 +2,7 @@ import { ModalView } from '@slack/bolt';
 import { userStore } from '../../../models/user/user.store';
 
 export function adminListView(uid: string): ModalView {
-  const users = userStore.users.filter(user => user.uid !== uid);
+  const users = userStore.users;
 
   const view: ModalView = {
     type: 'modal',
@@ -10,7 +10,15 @@ export function adminListView(uid: string): ModalView {
       type: 'plain_text',
       text: 'Edit Admins',
     },
-    callback_id: 'admin_modal_' + uid,
+    callback_id: 'admin_modal',
+    submit: {
+      type: 'plain_text',
+      text: 'Save',
+    },
+    close: {
+      text: 'Cancel',
+      type: 'plain_text',
+    },
     blocks: [
       {
         type: 'header',
@@ -20,38 +28,24 @@ export function adminListView(uid: string): ModalView {
         },
       },
       {
-        type: 'actions',
-        block_id: 'edit-admin-checkbox',
-        elements: users.map(user => ({
-          type: 'checkboxes',
-          initial_options: user.is_admin
-            ? [
-                {
-                  text: {
-                    text:
-                      user.slack_data?.real_name ||
-                      user.slack_data?.name ||
-                      'Error Fetching name',
-                    type: 'mrkdwn',
-                  },
-                  value: user.uid,
-                },
-              ]
-            : undefined,
-          options: [
-            {
-              text: {
-                text:
-                  user.slack_data?.real_name ||
-                  user.slack_data?.name ||
-                  'Error Fetching name',
-                type: 'mrkdwn',
-              },
-              value: user.uid,
-            },
-          ],
-          action_id: `admin-toggle-${user.uid}`,
-        })),
+        type: 'input',
+        block_id: 'data',
+        element: {
+          initial_users: users
+            .filter(user => user.is_admin)
+            .map(user => user.uid),
+          type: 'multi_users_select',
+          placeholder: {
+            type: 'plain_text',
+            text: 'Select users to become admins',
+            emoji: true,
+          },
+          action_id: 'data',
+        },
+        label: {
+          type: 'plain_text',
+          text: 'Admins',
+        },
       },
     ],
   };

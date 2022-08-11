@@ -50,6 +50,13 @@ export async function removeAdmin(uid: string) {
   }
 }
 
+export async function removeAllAdmins() {
+  await db.from<User>('users').update({ is_admin: false }).eq('is_admin', true);
+}
+export async function addAllAdmins(adminUids: string[]) {
+  await db.from<User>('users').update({ is_admin: true }).in('uid', adminUids);
+}
+
 export async function isUserAdmin(uid: string) {
   const users = await fetchAdminList();
   const user = users.find(user => user.uid === uid);
@@ -60,7 +67,7 @@ export function fetchUserByUid(uid: string) {
   return userStore.users.find(user => user.uid === uid);
 }
 
-export function removeEventFromAllUsers(eventId: number) {
+export async function removeEventFromAllUsers(eventId: number) {
   const userData: Partial<User>[] = userStore.users.map(user => {
     const { slack_data, ...rest } = user;
     return {
@@ -71,7 +78,7 @@ export function removeEventFromAllUsers(eventId: number) {
     };
   });
 
-  return db.from<User>('users').upsert(userData);
+  await db.from<User>('users').upsert(userData);
 }
 
 export function getEventStatusByUser(
