@@ -25,21 +25,25 @@ export async function deleteEventById(id: number) {
 }
 
 export async function fetchUpcomingEvents() {
+  let now = new Date();
+  now.setTime(now.getTime() - 7 * 60 * 60 * 1000);
   let upcomingEvents = await db
     .from<Event>('events')
     .select('*')
     .order('start_date', { ascending: true })
-    .gt('start_date', new Date().toUTCString());
+    .gt('start_date', now.toUTCString());
 
   return (upcomingEvents.data || [])?.map(attachCreatedByUser);
 }
 
 export async function fetchPastEvents(limit = 20) {
+  let now = new Date();
+  now.setTime(now.getTime() - 7 * 60 * 60 * 1000);
   const pastEvents = await db
     .from<Event>('events')
     .select('*')
     .order('start_date', { ascending: false })
-    .lte('start_date', new Date().toUTCString())
+    .lte('start_date', now.toUTCString())
     .limit(limit);
 
   return (pastEvents.data || []).map(attachCreatedByUser);
