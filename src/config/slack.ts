@@ -1,4 +1,4 @@
-import { App, ExpressReceiver } from '@slack/bolt';
+import { App, ExpressReceiver, LogLevel } from '@slack/bolt';
 import { registerEvents } from '../controllers';
 
 const expressReceiver = new ExpressReceiver({
@@ -10,6 +10,7 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   token: process.env.SLACKBOT_TOKEN,
   receiver: expressReceiver,
+  logLevel: LogLevel.DEBUG
 });
 
 registerEvents(app);

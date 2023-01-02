@@ -7,11 +7,11 @@ export function initLogger(app: App) {
     }
     if ('event' in body) {
       if ('view' in body.event) {
-        // delete body.event.view;
+        delete body.event.view;
       }
     }
 
-    // console.dir({ payload /*  body*/ }, { depth: null });
+    console.dir({ payload /*  body*/ }, { depth: null });
     await next();
   });
 }
