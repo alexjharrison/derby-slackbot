@@ -17,7 +17,7 @@ export async function toggleAdminStatus(uid: string, newAdminStatus: boolean) {
 }
 
 export async function fetchSlackUsers() {
-  return ((await app.client.users.list()).members || []).filter(
+  return ((await app.client.users.list({ limit: 200 })).members || []).filter(
     user => !user.is_bot && user.name !== 'slackbot'
   );
 }
