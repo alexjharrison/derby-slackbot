@@ -18,5 +18,5 @@ export function emojifyTitle(event: Event): string {
     SCRIMMAGE: "🤝🤝",
     SOCIAL: "🕺💃"
   }
-  return `${emojiDict[event.event_type]} ${event.title}`
+  return `${emojiDict[event.event_type]} ${event.title}`.trim()
 }
