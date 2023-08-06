@@ -10,6 +10,7 @@ Feel free to DM me about any bugs you find or feature requests that you'd find u
 - Receive a DM from the bot with RSVP links
 - Track RSVP status for each user on each event
 - View all users RSVP status on event detail screen
+- Filter events based on event type (e.g. game, practice, social)
 - Admin only features
     - Create/Edit/Delete events
     - Manage admin users 
