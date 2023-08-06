@@ -8,6 +8,7 @@ import { render } from '../../utils/render';
 import { homeAdminView } from './admin';
 import { generateEventList } from './events';
 import { homeHeaderView } from './header';
+import { eventTypeFilter } from './filter';
 
 export async function generateHomeView(): Promise<HomeView> {
   const futureEvents = await fetchUpcomingEvents();
@@ -16,16 +17,18 @@ export async function generateHomeView(): Promise<HomeView> {
 
   return is_admin
     ? render(
-        'home',
-        homeHeaderView,
-        homeAdminView,
-        generateEventList('Upcoming Events', futureEvents),
-        generateEventList('Past Events', pastEvents)
-      )
+      'home',
+      homeHeaderView,
+      homeAdminView,
+      eventTypeFilter(),
+      generateEventList('Upcoming Events', futureEvents),
+      // generateEventList('Past Events', pastEvents)
+    )
     : render(
-        'home',
-        homeHeaderView,
-        generateEventList('Upcoming Events', futureEvents),
-        generateEventList('Past Events', pastEvents)
-      );
+      'home',
+      homeHeaderView,
+      eventTypeFilter(),
+      generateEventList('Upcoming Events', futureEvents),
+      // generateEventList('Past Events', pastEvents)
+    );
 }

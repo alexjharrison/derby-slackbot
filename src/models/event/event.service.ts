@@ -1,6 +1,4 @@
-import { RsvpStatus } from '../../config/constants';
 import { db } from '../../config/supabase';
-import { fetchUserByUid } from '../user/user.service';
 import { userStore } from '../user/user.store';
 import { Event } from './event.interface';
 
@@ -27,11 +25,17 @@ export async function deleteEventById(id: number) {
 export async function fetchUpcomingEvents() {
   let now = new Date();
   now.setTime(now.getTime() - 7 * 60 * 60 * 1000);
-  let upcomingEvents = await db
+  let upcomingEventsPromise = db
     .from<Event>('events')
-    .select('*')
+    .select()
     .order('start_date', { ascending: true })
     .gt('start_date', now.toUTCString());
+
+  const { selected_event_filter } = userStore.currentUser
+  if (selected_event_filter !== 'ALL') {
+    upcomingEventsPromise.eq("event_type", selected_event_filter)
+  }
+  const upcomingEvents = await upcomingEventsPromise
 
   return (upcomingEvents.data || [])?.map(attachCreatedByUser);
 }

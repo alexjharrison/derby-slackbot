@@ -10,6 +10,7 @@ import { openEventEditModal } from './open-event-edit-modal';
 import { handleRSVPResponse } from './rsvp-response';
 import { toggleAdmin } from './toggle-admin';
 import { upsertEvent } from './upsert-event';
+import { selectEventFilter } from './select-event-filter';
 
 export function registerEvents(app: App) {
   // register middleware to keep users synced with db
@@ -26,6 +27,7 @@ export function registerEvents(app: App) {
     deleteEvent,
     upsertEvent,
     toggleAdmin,
+    selectEventFilter
   ];
 
   listeners.forEach(event => event(app));

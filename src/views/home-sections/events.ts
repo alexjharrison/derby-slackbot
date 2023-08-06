@@ -5,7 +5,7 @@ import { generateCompactEventView } from './event-compact';
 
 export function generateEventList(
   headerText: string,
-  events: Event[]
+  events: Event[],
 ): HomeView['blocks'] {
   const eventList: HomeView['blocks'] = [
     {

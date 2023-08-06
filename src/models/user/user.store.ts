@@ -1,12 +1,10 @@
-import { reactive } from '@vue/reactivity';
 import { testUser, User } from './user.interface';
-
-interface UserStore {
-  users: User[];
-  currentUser: User;
+class UserStore {
+  constructor
+    (
+      public users: User[] = [],
+      public currentUser: User = testUser
+    ) { }
 }
 
-export const userStore: UserStore = {
-  users: [],
-  currentUser: testUser,
-};
+export const userStore = new UserStore()

@@ -11,7 +11,11 @@
     "esModuleInterop": true,
     "noImplicitReturns": true,
     "noEmit": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
-  "include": ["src"]
+  "include": ["src"],
+  "ts-node":{
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }

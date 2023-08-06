@@ -57,11 +57,26 @@ export async function addAllAdmins(adminUids: string[]) {
   await db.from<User>('users').update({ is_admin: true }).in('uid', adminUids);
 }
 
+export async function updateUserSelectedEventFilter(selectedEventFilter: User['selected_event_filter']) {
+  const { data: me } = await db.from<User>('users')
+    .update({ selected_event_filter: selectedEventFilter })
+    .eq('id', userStore.currentUser.id)
+    .single()
+
+  if (me) {
+    userStore.currentUser = me
+    userStore.users = userStore.users.map(user =>
+      me.id === user.id ? me : user
+    )
+  }
+}
+
 export async function isUserAdmin(uid: string) {
   const users = await fetchAdminList();
   const user = users.find(user => user.uid === uid);
   return !!user;
 }
+
 
 export function fetchUserByUid(uid: string) {
   return userStore.users.find(user => user.uid === uid);
