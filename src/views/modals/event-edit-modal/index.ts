@@ -1,6 +1,7 @@
 import { ModalView } from '@slack/bolt';
 import { format } from 'date-fns';
 import { Event } from '../../../models/event/event.interface';
+import { eventType } from '../../../config/constants';
 
 export function EventEditView(event?: Event): ModalView {
   const view: ModalView = {
@@ -37,6 +38,43 @@ export function EventEditView(event?: Event): ModalView {
             type: 'plain_text',
           },
         },
+      },
+      {
+        block_id: "event_type_parent",
+        type: "input",
+        label: {
+          type: "plain_text",
+          text: "Event Type"
+        },
+        "element": {
+          action_id: "data",
+          type: "static_select",
+          placeholder: {
+            type: "plain_text",
+            text: "Select Event Type",
+            emoji: true
+          },
+          ...(event?.event_type && {
+            initial_option: {
+              value: event.event_type,
+              text: {
+                text: eventType[event.event_type],
+                type: "plain_text",
+                emoji: true
+              },
+            },
+          }),
+          options: Object.entries(eventType)
+            .map(([id, text]) => (
+              {
+                value: id,
+                text: {
+                  text, type: "plain_text",
+                  emoji: true
+                }
+              }
+            ))
+        }
       },
       {
         type: 'input',

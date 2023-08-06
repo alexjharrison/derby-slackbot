@@ -3,14 +3,15 @@ import { format } from 'date-fns';
 import { Event } from '../../models/event/event.interface';
 import { getEventStatusByUser } from '../../models/user/user.service';
 import { userStore } from '../../models/user/user.store';
+import { emojifyTitle } from '../../utils/text';
 
 export function generateCompactEventView(evt: Event): HomeView['blocks'] {
   const formattedDate =
     (evt.start_date
       ? `*Date*: ${format(new Date(evt.start_date), 'PPPP')}\n${format(
-          new Date(evt.start_date),
-          'p'
-        )}`
+        new Date(evt.start_date),
+        'p'
+      )}`
       : '') +
     (evt.end_date ? ` - ${format(new Date(evt.end_date), 'p')}\n` : '');
 
@@ -19,10 +20,10 @@ export function generateCompactEventView(evt: Event): HomeView['blocks'] {
     status === 'accepted'
       ? ':white_check_mark:'
       : status === 'rejected'
-      ? ':no_entry_sign:'
-      : status === 'unsure'
-      ? ':question:'
-      : ':question:';
+        ? ':no_entry_sign:'
+        : status === 'unsure'
+          ? ':question:'
+          : ':question:';
 
   const view: HomeView['blocks'] = [
     {
@@ -30,7 +31,7 @@ export function generateCompactEventView(evt: Event): HomeView['blocks'] {
       fields: [
         {
           text:
-            `*${evt.title}*\n${formattedDate}\n` +
+            `*${emojifyTitle(evt)}*\n${formattedDate}\n` +
             (evt.location_name ? `*Location*: ${evt.location_name}` : ''),
           type: 'mrkdwn',
         },

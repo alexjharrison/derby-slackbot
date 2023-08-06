@@ -4,7 +4,9 @@ export const EVENT_CHANNEL_ID = 'C03QTEX496G';
 export type RsvpStatus = 'accepted' | 'rejected' | 'unsure';
 
 export const eventType = {
-    GAME: "Game / Scrimmage",
+    GAME: "Game",
+    PRACTICE: "Practice",
+    SCRIMMAGE: "Scrimmage",
     FUNDRAISER: "Fundraiser",
     SOCIAL: "Social",
     OTHER: "Other"

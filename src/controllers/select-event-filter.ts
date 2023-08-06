@@ -11,7 +11,6 @@ export function selectEventFilter(app: App) {
             await ack();
             if ("selected_option" in payload) {
                 if (payload.selected_option && "value" in payload.selected_option) {
-
                     const eventTypeId = payload.selected_option.value as EventTypeWithAll
 
                     await updateUserSelectedEventFilter(eventTypeId)

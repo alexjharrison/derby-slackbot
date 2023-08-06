@@ -7,6 +7,7 @@ import { userStore } from '../models/user/user.store';
 import { generateHomeView } from '../views/home-sections';
 import { generateEventRow } from '../views/home-sections/event';
 import { generateRSVPButtons } from '../views/home-sections/rsvp-buttons';
+import { EventType, EventTypeWithAll } from '../config/constants';
 
 export function upsertEvent(app: App) {
   app.view<ViewSubmitAction>(
@@ -52,6 +53,9 @@ export function upsertEvent(app: App) {
       if (state.is_cancelled.data.selected_options) {
         event.is_cancelled =
           state.is_cancelled.data.selected_options.length > 0;
+      }
+      if (state.event_type_parent.data.selected_option?.value) {
+        event.event_type = state.event_type_parent.data.selected_option.value as EventType
       }
 
       const savedEvent = (await saveEvent(event)).data;
