@@ -7,7 +7,7 @@ export const eventType = {
     GAME: "Game",
     PRACTICE: "Practice",
     SCRIMMAGE: "Scrimmage",
-    FUNDRAISER: "Fundraiser",
+    FUNDRAISER: "Fundraiser/Volunteer",
     SOCIAL: "Social",
     OTHER: "Other"
 } as const
